@@ -1,0 +1,6 @@
+[submodule "Plugins/XsollaStore"]
+	path = Plugins/XsollaStore
+	url = ../store-ue4-sdk.git
+[submodule "Plugins/XsollaLogin"]
+	path = Plugins/XsollaLogin
+	url = ../login-ue4-sdk.git
