@@ -43,73 +43,40 @@ def DeleteReadOnly(action, name, exc):
     os.remove(name)
 
 # Check platform for running this script (currently only Windows supported)
-
-print('Checking platform...')
-
 if not platform.system() == 'Windows':
     sys.exit(f'Error: {platform.system()} is not supported')
 
-print('Success: Platform check completed')
-
 # Check if demo project exists
-
-print('Checking demo project...')
-
 if not os.path.exists(demo_project_path):
     sys.exit(f'Error: Failed to locate demo project at {demo_project_path}')
 
-print('Success: Demo project exists')
-
 # Clear temporaries if any in demo project folder
-
-print('Deleting demo project temporaries...')
-
 temp_folders = ['Binaries', 'Build', 'Intermediate', 'DerivedDataCache', 'Saved', 'Plugins']
-
 for temp_folder in temp_folders:
-    rm_path = os.path.join(demo_project_path, temp_folder)
-    if (os.path.exists(rm_path)):
-        print(f'Removing {rm_path}')
-        shutil.rmtree(rm_path, ignore_errors=False, onerror=DeleteReadOnly)
-
-print('Success: Demo project cleared')
+    temp_folder_path = os.path.join(demo_project_path, temp_folder)
+    if (os.path.exists(temp_folder_path)):
+        print(f'Removing {temp_folder_path}')
+        shutil.rmtree(temp_folder_path, ignore_errors=False, onerror=DeleteReadOnly)
 
 # Clone UE plugin to demo project Plugins folder
-
-print('Cloning plugin...')
-
 from git import Repo
 repo = Repo.clone_from(plugin_repo_link, os.path.join(demo_project_path, 'Plugins/Xsolla'), branch=plugin_repo_branch, progress=CloneProgress())
 
-print('Success: Plugin cloned')
-
 # Check if Unreal Automation Tool (UAT) exists
-
-print('Checking UAT...')
-
 uat = os.path.join(engine_path, 'Engine/Binaries/DotNET/AutomationTool.exe')
 if not os.path.exists(uat):
     sys.exit(f'Error: Failed to locate Unreal Build Tool at {uat}')
 
-print('Success: UAT is ready')
+# Prepare folder for storing build artifacts
+packages_path = os.path.join(build_output_path, 'Packages')
+if os.path.exists(packages_path):
+    shutil.rmtree(packages_path)
+os.makedirs(packages_path)
 
 # Package demo project
-
 build_platforms = ['Win64', 'Android']
-
 demo_project = os.path.join(demo_project_path, demo_project_name + '.uproject')
-
 for platform in build_platforms:
-
-    platform_build_output_path = os.path.join(build_output_path, platform)
-
-    if os.path.exists(platform_build_output_path):
-        shutil.rmtree(platform_build_output_path)
-
-    os.makedirs(platform_build_output_path)
-
-    print(f'Start packaging for {platform}...')
-
     result = subprocess.run([uat,
         'BuildCookRun',
         '-utf8output',
@@ -120,12 +87,10 @@ for platform in build_platforms:
         '-build',
         '-stage',
         '-prereqs',
-        '-archivedirectory=' + platform_build_output_path,
+        '-archivedirectory=' + packages_path,
         '-archive',
     ], stdout=sys.stdout)
 
     if result.returncode != 0:
         print(f'Error: AutomationTool Error: {result.stderr}')
         break
-
-    print(f'Success: Packaging for {platform} completed')
