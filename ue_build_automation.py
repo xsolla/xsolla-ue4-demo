@@ -6,6 +6,7 @@ import shutil
 import git
 import stat
 import platform
+import getopt
 
 # Prerequisites:
 #
@@ -24,13 +25,12 @@ import platform
 # - default game level
 
 # Global variables
-
-engine_path = 'D:/UnrealEditors/UE_4.26'                            # Unreal Engine install root folder
-demo_project_path = 'D:/Test'                                       # path to demo project root folder
-demo_project_name = 'MyXsolla'                                      # demo project name
-build_output_path = 'C:/Users/tusta/Desktop'                        # folder where build artifacts will be stored
-plugin_repo_link = 'https://github.com/xsolla/store-ue4-sdk.git'    # plugin repo for which demo builds should be produced
-plugin_repo_branch = 'develop'                                      # plugin repo branch that should be checked out
+engine_path = None                  # path to UE install directory
+demo_project_path = None            # path to demo project directory
+demo_project_name = None            # demo project name
+build_output_path = None            # path to the directory where build artifacts will be stored
+plugin_repo_link = None             # UE plugin repo link
+plugin_repo_branch = None           # UE plugin repo branch
 
 # Plugin git clone progress tracking utility
 class CloneProgress(git.remote.RemoteProgress):
@@ -41,6 +41,52 @@ class CloneProgress(git.remote.RemoteProgress):
 def DeleteReadOnly(action, name, exc):
     os.chmod(name, stat.S_IWRITE)
     os.remove(name)
+
+# Check script args
+if len(sys.argv) < 6:
+    print('Provide the following parameters:')
+    print('-u, --ue_base - path to the UE installation directory')
+    print('-d, --demo_base - path to the demo project directory')
+    print('-n, --demo_name - demo project name')
+    print('-o, --build_output - path to the directory where build artifacts will be stored')
+    print('-r, --repo - UE plugin repo link')
+    print('-b, --branch - UE plugin repo branch')
+    sys.exit('Invalid parameter provided')
+
+# Parse script args
+argv = sys.argv[1:]
+try:
+    opts, args = getopt.getopt(argv, "u:d:n:o:r:b:", ["ue_base=", "demo_base=", "demo_name=", "build_output=", "repo=", "branch="])
+except:
+    sys.exit('Error: Failed to parse arguments')
+
+for opt, arg in opts:
+    if opt in ['-u', '--ue_base']:
+        engine_path = os.path.abspath(arg)
+    elif opt in ['-d', '--demo_base']:
+        demo_project_path = os.path.abspath(arg)
+    elif opt in ['-n', '--demo_name']:
+        demo_project_name = arg
+    elif opt in ['-o', '--build_output']:
+        build_output_path = os.path.abspath(arg)
+    elif opt in ['-r', '--repo']:
+        plugin_repo_link = arg
+    elif opt in ['-b', '--branch']:
+        plugin_repo_branch = arg
+
+# Check whether all variables are set
+if engine_path is None:
+    sys.exit('Error: Provide a valid path to the UE installation directory')
+if demo_project_path is None:
+    sys.exit('Error: Provide a valid path to the demo project directory')
+if demo_project_name is None:
+    sys.exit('Error: Provide a valid demo project name')
+if build_output_path is None:
+    sys.exit('Error: Provide a valid path to the directory where build artifacts will be stored')
+if plugin_repo_link is None:
+    sys.exit('Error: Provide a valid UE plugin repo link')
+if plugin_repo_branch is None:
+    sys.exit('Error: Provide a valid UE plugin repo branch')
 
 # Check platform for running this script (currently only Windows supported)
 if not platform.system() == 'Windows':
