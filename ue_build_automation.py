@@ -15,6 +15,7 @@ import winreg
 # - Python 3.8+ (https://www.python.org/downloads/)
 # - GitPython library (https://gitpython.readthedocs.io/en/stable/intro.html#requirements)
 # - Unreal Engine 4.26 (https://www.epicgames.com/store/download)
+# - ReSharper Command Line Tools (https://www.jetbrains.com/resharper/download/#section=commandline)
 #
 # Make sure that Python and Git tools are added to your PATH so you can freely invoke them on the command line.
 # Unreal Engine install has to be properly configured (this means that building for Windows and Android works).
