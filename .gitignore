@@ -76,3 +76,4 @@ Plugins/*/Intermediate/*
 DerivedDataCache/*
 /.vscode/
 *.code-workspace
+.idea
