@@ -10,8 +10,5 @@ public class MyXsollaEditorTarget : TargetRules
 		Type = TargetType.Editor;
 
 		ExtraModuleNames.AddRange( new string[] { "MyXsolla" } );
-
-        bUseUnityBuild = false;
-        bUsePCHFiles = false;
     }
 }
