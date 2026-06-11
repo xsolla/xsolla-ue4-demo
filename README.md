@@ -1,12 +1,3 @@
-> [!WARNING]
-> **This demo project is for the deprecated Xsolla UE4 SDK and is no longer actively maintained.**
->
-> If you arrived here from a web search, this is a legacy sample project for an older Xsolla Unreal Engine integration. For current Unreal Engine integration, use the **Xsolla Game Commerce SDK** instead — it supports Unreal Engine 5 and covers login, store, payments, and subscriptions in a single unified plugin.
->
-> - 🔗 **[Game Commerce SDK](https://github.com/xsolla/store-ue4-sdk)** on GitHub — the actively maintained UE replacement
-> - 📖 **[Unreal Engine SDK Documentation](https://developers.xsolla.com/sdk/unreal-engine/)** — get started with the current integration
-> - 🔭 **[SDK Explorer](https://developers.xsolla.com/sdk/demo/)** — try the SDK interactively before writing any code
-
 # xsolla-ue4-demo
 
 ## Overview
