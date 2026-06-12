@@ -1,3 +1,5 @@
+> **Repository Status Notice:** This repository is listed in the [Xsolla GitHub Repository Ownership Registry](https://xsolla.atlassian.net/wiki/spaces/DevRel1/pages/24686166252/Xsolla+GitHub+-+Repository+Ownership+Registry) as having no identified owner. It may be archived if no owner or active use case is confirmed.
+
 # xsolla-ue4-demo
 
 ## Overview
